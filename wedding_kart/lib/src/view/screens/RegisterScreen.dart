@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:wedding_kart/src/view/screens/DashboardScreen.dart';
 
 
 class RegisterScreen extends StatelessWidget {
@@ -9,6 +10,37 @@ class RegisterScreen extends StatelessWidget {
       home: RegisterScreenUI(),
     );
   }
+}
+void showAlertDialog(BuildContext context,String message) {
+  showDialog(
+    context: context,
+    builder: (BuildContext dialogContext) { // Changed context to dialogContext
+      return AlertDialog(
+        title: Text("Info",style: TextStyle(
+          color: Colors.black,
+          fontFamily: 'PlayfairDisplay',
+          fontWeight: FontWeight.w400,
+          fontSize: 18,)),
+        content: Text(message,style: TextStyle(
+          color: Colors.black,
+          fontFamily: 'PlayfairDisplay',
+          fontWeight: FontWeight.w400,
+          fontSize: 18,)),
+        actions: [
+          TextButton(
+            child: Text("OK",style: TextStyle(
+                color: Colors.redAccent,
+                fontFamily: 'PlayfairDisplay',
+                fontWeight: FontWeight.w600,
+                fontSize: 20),),
+            onPressed: () {
+              Navigator.of(dialogContext).pop(); // Use the dialogContext here
+            },
+          ),
+        ],
+      );
+    },
+  );
 }
 
 class RegisterScreenUI extends StatefulWidget{
@@ -188,6 +220,21 @@ class _RegisterScreenState extends State<RegisterScreenUI>{
                                   // Step 4: Use the controller to do something with the input
                                   var email = _controllerEmail.text.toString();
                                   var password = _controllerPassword.text.toString();
+                                  var fullName = _controllerFullName.text.toString();
+
+                                  if(fullName.isEmpty){
+                                    showAlertDialog(context, "Please enter full name");
+                                  }else if(email.isEmpty){
+                                    showAlertDialog(context, "Please enter email address");
+                                  }else if(password.isEmpty){
+                                    showAlertDialog(context, "Please enter password");
+                                  }else{
+                                    // Navigate to DashboardScreen
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => DashboardScreen()),
+                                    );
+                                  }
 
                                   print("Text field value: ${_controllerEmail.text} & ${_controllerPassword.text}");
                                 },

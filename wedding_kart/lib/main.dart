@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:wedding_kart/src/view/screens/DashboardScreen.dart';
 import 'package:wedding_kart/src/view/screens/RegisterScreen.dart';
 
 void main() => runApp(MyApp());
@@ -24,11 +25,23 @@ void showAlertDialog(BuildContext context) {
     context: context,
     builder: (BuildContext dialogContext) { // Changed context to dialogContext
       return AlertDialog(
-        title: Text("Info"),
-        content: Text("Email or password cannot be empty."),
+        title: Text("Info",style: TextStyle(
+          color: Colors.black,
+          fontFamily: 'PlayfairDisplay',
+          fontWeight: FontWeight.w400,
+          fontSize: 18,)),
+        content: Text("Email or password cannot be empty.",style: TextStyle(
+            color: Colors.black,
+            fontFamily: 'PlayfairDisplay',
+            fontWeight: FontWeight.w400,
+            fontSize: 18,)),
         actions: [
           TextButton(
-            child: Text("OK"),
+            child: Text("OK",style: TextStyle(
+                color: Colors.redAccent,
+                fontFamily: 'PlayfairDisplay',
+                fontWeight: FontWeight.w600,
+                fontSize: 20),),
             onPressed: () {
               Navigator.of(dialogContext).pop(); // Use the dialogContext here
             },
@@ -189,7 +202,7 @@ class _HomeScreenState extends State<HomeScreen>{
                                 print("Text field value: ${_controllerEmail.text} & ${_controllerPassword.text}");
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => RegisterScreen()),
+                                  MaterialPageRoute(builder: (context) => DashboardScreen()),
                                 );
                               }
                               },
