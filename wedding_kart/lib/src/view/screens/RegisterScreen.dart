@@ -1,49 +1,28 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:wedding_kart/src/view/screens/RegisterScreen.dart';
 
-void main() => runApp(MyApp());
 
-class MyApp extends StatelessWidget {
+class RegisterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: HomeScreen(),
+      home: RegisterScreenUI(),
     );
   }
 }
 
-class HomeScreen extends StatefulWidget {
+class RegisterScreenUI extends StatefulWidget{
 
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  _RegisterScreenState createState() => _RegisterScreenState();
 
 }
-void showAlertDialog(BuildContext context) {
-  showDialog(
-    context: context,
-    builder: (BuildContext dialogContext) { // Changed context to dialogContext
-      return AlertDialog(
-        title: Text("Info"),
-        content: Text("Email or password cannot be empty."),
-        actions: [
-          TextButton(
-            child: Text("OK"),
-            onPressed: () {
-              Navigator.of(dialogContext).pop(); // Use the dialogContext here
-            },
-          ),
-        ],
-      );
-    },
-  );
-}
 
+class _RegisterScreenState extends State<RegisterScreenUI>{
 
-class _HomeScreenState extends State<HomeScreen>{
-  // Step 1: Declare a TextEditingController
   final TextEditingController _controllerEmail = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();
+  final TextEditingController _controllerFullName = TextEditingController();
 
   @override
   void initState() {
@@ -51,6 +30,8 @@ class _HomeScreenState extends State<HomeScreen>{
     // Optional: Set an initial value
     _controllerEmail.text = "";
     _controllerPassword.text = "";
+    _controllerFullName.text = "";
+
 
   }
   @override
@@ -58,6 +39,8 @@ class _HomeScreenState extends State<HomeScreen>{
     // Step 2: Dispose of the controller
     _controllerEmail.dispose();
     _controllerPassword.dispose();
+    _controllerFullName.dispose();
+
 
     super.dispose();
   }
@@ -109,7 +92,7 @@ class _HomeScreenState extends State<HomeScreen>{
                                   padding: EdgeInsets.only(
                                       left: 20, right: 20, top: 20),
                                   child: Text(
-                                    "Login to your Account",
+                                    "Create New Account ",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         color: Colors.redAccent,
@@ -120,6 +103,30 @@ class _HomeScreenState extends State<HomeScreen>{
                                 ),
                               ],
                             ),
+                            SizedBox(height: 20,),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(left: 10),
+                                  child: Text(
+                                    "Enter Full Name",
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                        color: Colors.grey,
+                                        fontFamily: 'PlayfairDisplay',
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: 16),
+                                  ),
+                                )
+                              ],
+                            ),
+                            Padding(padding: EdgeInsets.only(left: 10),child:
+                            TextField(
+                              controller: _controllerFullName,
+                              decoration: InputDecoration(labelText: ''),
+                            ),),
+                            SizedBox(height: 20,),
                             SizedBox(height: 20),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
@@ -167,63 +174,7 @@ class _HomeScreenState extends State<HomeScreen>{
                               decoration: InputDecoration(labelText: ''),
                             ),),
                             SizedBox(height: 50,),
-                            ElevatedButton(
-                              style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all<Color>(Colors.redAccent),
-                                padding: MaterialStateProperty.all<EdgeInsetsGeometry>(EdgeInsets.only(left: 35,right: 35,top: 10,bottom: 10))// Set your desired color
-                              ),                              onPressed: () {
-                                // Step 4: Use the controller to do something with the input
-                              var email = _controllerEmail.text.toString();
-                              var password = _controllerPassword.text.toString();
 
-                              if(email.isEmpty){
-                                showAlertDialog(context);
-
-
-                              }else if(password.isEmpty){
-                                showAlertDialog(context);
-
-
-                              } else{
-                                //navigate to dashboard screen
-                                print("Text field value: ${_controllerEmail.text} & ${_controllerPassword.text}");
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => RegisterScreen()),
-                                );
-                              }
-                              },
-                              child: Text(
-                                "Login",
-                                textAlign: TextAlign.start,
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontFamily: 'PlayfairDisplay',
-                                    fontWeight: FontWeight.w800,
-                                    fontSize: 21),
-                              ),
-                            ),
-                            SizedBox(height: 20,),
-                            Stack(
-                              alignment: Alignment.center,
-                              children: [
-
-                                Padding(padding: EdgeInsets.all(10),child:
-
-                                Text(
-                                  "OR",
-                                  textAlign: TextAlign.start,
-                                  style: TextStyle(
-
-                                      color: Colors.redAccent,
-                                      fontFamily: 'PlayfairDisplay',
-                                      fontWeight: FontWeight.w900,
-                                      fontSize: 23),
-                                ),)
-
-                              ],
-                            ),
-                            SizedBox(height: 12,),
 
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -234,14 +185,11 @@ class _HomeScreenState extends State<HomeScreen>{
                                       backgroundColor: MaterialStateProperty.all<Color>(Colors.redAccent),
                                       padding: MaterialStateProperty.all<EdgeInsetsGeometry>(EdgeInsets.only(left: 35,right: 35,top: 10,bottom: 10))// Set your desired color
                                   ),                              onPressed: () {
-                                  try {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(builder: (context) => RegisterScreen()),
-                                    );
-                                  } catch (e) {
-                                    print('Failed to navigate: $e');
-                                  }
+                                  // Step 4: Use the controller to do something with the input
+                                  var email = _controllerEmail.text.toString();
+                                  var password = _controllerPassword.text.toString();
+
+                                  print("Text field value: ${_controllerEmail.text} & ${_controllerPassword.text}");
                                 },
                                   child: Text(
                                     "Create New Account",
@@ -274,4 +222,5 @@ class _HomeScreenState extends State<HomeScreen>{
       ),
     );
   }
+
 }
