@@ -2,6 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:wedding_kart/main.dart';
 import 'package:wedding_kart/src/view/screens/DashboardScreen.dart';
+import 'package:wedding_kart/src/view/widgets/CustomCardWidget.dart';
+import 'package:wedding_kart/src/view/widgets/ImageCard.dart';
+import 'package:wedding_kart/src/view/widgets/OptionsSheet.dart';
 
 class RegisterScreen extends StatelessWidget {
   @override
@@ -58,27 +61,49 @@ class RegisterScreenUI extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreenUI> {
-  final TextEditingController _controllerEmail = TextEditingController();
-  final TextEditingController _controllerPassword = TextEditingController();
-  final TextEditingController _controllerFullName = TextEditingController();
+  final TextEditingController _controllerMotherTongue = TextEditingController();
+  final TextEditingController _controllerCommunity = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     // Optional: Set an initial value
-    _controllerEmail.text = "";
-    _controllerPassword.text = "";
-    _controllerFullName.text = "";
+    _controllerMotherTongue.text = "";
+    _controllerCommunity.text = "";
   }
 
   @override
   void dispose() {
     // Step 2: Dispose of the controller
-    _controllerEmail.dispose();
-    _controllerPassword.dispose();
-    _controllerFullName.dispose();
+    _controllerMotherTongue.dispose();
+    _controllerCommunity.dispose();
 
     super.dispose();
+  }
+  void _showBottomSheetMotherTongue(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => OptionsSheet(
+        options: ["Hindi", "Marathi", "Punjabi", "Bengali", "Gujrati", "Telugu","Tamil","Urdu","Kannada","Odia","Malayalam","English"],
+        onItemSelected: (selectedItem) {
+          _controllerMotherTongue.text = selectedItem;
+          Navigator.pop(context);
+        },
+      ),
+    );
+  }
+
+  void _showBottomSheetCommunity(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => OptionsSheet(
+        options: ["Hindu-Maratha", "Hindu-Rajput", "Hindu-Brahmin", "Hindu-Yadav", "Hindu-Agarwal", "Hindu-Baniya","Hindu-Jat","Sikh-Jat","Muslim-Sunni","Buddhish-Buddhish","Hindu-Kayastha"],
+        onItemSelected: (selectedItem) {
+          _controllerCommunity.text = selectedItem;
+          Navigator.pop(context);
+        },
+      ),
+    );
   }
 
   @override
@@ -124,9 +149,7 @@ class _RegisterScreenState extends State<RegisterScreenUI> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          height: MediaQuery.of(context)
-              .size
-              .height, // Set height to fill the screen
+
            // Set width to fill the screen
           decoration: BoxDecoration(
             gradient: LinearGradient(
@@ -210,7 +233,12 @@ class _RegisterScreenState extends State<RegisterScreenUI> {
                                         Padding(
                                           padding: EdgeInsets.only(left: 10),
                                           child: TextField(
-                                            controller: _controllerFullName,
+                                            controller: _controllerMotherTongue,
+                                            onTap: () {
+                                              _showBottomSheetMotherTongue(context);
+                                            },
+
+                                            canRequestFocus: false,
                                             decoration: InputDecoration(
                                               labelText: 'Mother Tongue*',
                                               hintText: '',
@@ -249,7 +277,12 @@ class _RegisterScreenState extends State<RegisterScreenUI> {
                                         Padding(
                                           padding: EdgeInsets.only(left: 10),
                                           child: TextField(
-                                            controller: _controllerEmail,
+                                            controller: _controllerCommunity,
+                                            onTap: () {
+                                              _showBottomSheetCommunity(context);
+                                            },
+
+                                            canRequestFocus: false,
                                             decoration: InputDecoration(
                                               labelText: 'Community *',
                                               hintText: '',
@@ -302,37 +335,7 @@ class _RegisterScreenState extends State<RegisterScreenUI> {
                                                     ),
                                                 onPressed: () {
                                                   // Step 4: Use the controller to do something with the input
-                                                  var email = _controllerEmail
-                                                      .text
-                                                      .toString();
-                                                  var password =
-                                                      _controllerPassword.text
-                                                          .toString();
-                                                  var fullName =
-                                                      _controllerFullName.text
-                                                          .toString();
 
-                                                  if (fullName.isEmpty) {
-                                                    showAlertDialog(context,
-                                                        "Please enter full name");
-                                                  } else if (email.isEmpty) {
-                                                    showAlertDialog(context,
-                                                        "Please enter email address");
-                                                  } else if (password.isEmpty) {
-                                                    showAlertDialog(context,
-                                                        "Please enter password");
-                                                  } else {
-                                                    // Navigate to DashboardScreen
-                                                    Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              DashboardScreen()),
-                                                    );
-                                                  }
-
-                                                  print(
-                                                      "Text field value: ${_controllerEmail.text} & ${_controllerPassword.text}");
                                                 },
                                                 child: Text(
                                                   "Let's Begin",
@@ -362,29 +365,163 @@ class _RegisterScreenState extends State<RegisterScreenUI> {
                   )
                 ],
               ),
-              // Container(
-              //   decoration: BoxDecoration(
-              //     gradient: LinearGradient(
-              //       begin: Alignment.topCenter,
-              //       end: Alignment.bottomCenter,
-              //       colors: [
-              //         Color.fromRGBO(109, 36, 81, 1),
-              //         Color.fromRGBO(146, 29, 38, 1)
-              //       ], // Adjust colors as needed
-              //     ),
-              //   ),
-              //   child:
-              //
-              //
-              //   Column(
-              //     mainAxisAlignment: MainAxisAlignment.start,
-              //     children: [
-              //       _buildSection("Why choose Wedding Star ?", "Genuine Profiles | Safe & Secure | \n  Detailed Family Information", 21, 14),
-              //       _buildSection("Get Complete Family Information", "You will find detailed family information in every profile. \n Knowing the family \n will help you take the next step with confidence.", 17, 14),
-              //
-              //     ],
-              //   ),
-              // )
+              Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Colors.white,
+                      Colors.white,
+                    ], // Adjust colors as needed
+                  ),
+                ),
+                child:
+
+
+
+
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    _buildSection("Why choose Wedding Star ?", "Genuine Profiles | Safe & Secure | \n  Detailed Family Information", 21, 14),
+                    _buildSection("Get Complete Family Information", "You will find detailed family information in every profile. \n Knowing the family \n will help you take the next step with confidence.", 17, 14),
+                    _buildSection("Get Matches from your Community", "With over 80 community sites, you can find a \n Match from your community.Finding a Match based on caste and religion made easy.", 17, 14),
+                    _buildSection("Enable your search without any barrier", "Embark on your journey to find your perfect match now available in multiple languages", 17, 14),
+
+                    ImageCard(imageUrl: 'https://static.toiimg.com/imagenext/toiblogs/photo/readersblog/wp-content/uploads/2020/04/Indian-Bride-Feature-Image.jpg',text: 'Play our new TV Ad'),
+                    _buildSection("Over 40,000+ Happy Stories", "Embark on your journey to find your perfect match now available in multiple languages", 21, 14),
+                    CustomCardWidget(imageUrl: 'https://img.weddingbazaar.com/shaadisaga_production/photos/pictures/006/796/410/new_medium/page.jpg?1684837759', title: 'Mehnaz Fatima & Syed Rizwan Hashmi', description: 'My brother has created my profile on Shaadi.com. I was not actually using my profile.')
+                  ],
+                ),
+              ),
+
+              Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Color.fromRGBO(109, 36, 81, 1),
+                      Color.fromRGBO(146, 29, 38, 1)
+                    ], // Adjust colors as needed
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.max,
+
+                    children: [
+                      Text(
+                        textAlign: TextAlign.center,
+                        'About Sangam', // Title from parameters
+                        style: TextStyle(
+                          fontSize: 24, // Big font size
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+
+                        ),
+                      ),
+
+                      Text(
+                        textAlign: TextAlign.center,
+                        'Sangam is a trusted matchmaking service created for parents who are looking for a life partner for their loved ones.Unlike other Materimonial Services, we focus on providing trustworthy detailed family and background information to help you take the next step with confidence.', // Title from parameters
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12, // Big font size
+                          fontWeight: FontWeight.w300,
+                        ),
+                      ),
+                      SizedBox(height: 20,),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              'Contact us',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: 'PlayfairDisplay',
+                                fontWeight: FontWeight.w400,
+                                fontSize: 11,
+                              ),
+                            ),
+                          ),
+                          Container(
+                            width: 2, // Adjust the width of the line as needed
+                            height: 20, // Adjust the height of the line as needed
+                            color: Colors.white, // Set the color of the line
+                          ),
+                          Expanded(
+                            child: Text(
+                              'Terms & Conditions',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: 'PlayfairDisplay',
+                                fontWeight: FontWeight.w400,
+                                fontSize: 11,
+                              ),
+                            ),
+                          ),
+                          Container(
+                            width: 2, // Adjust the width of the line as needed
+                            height: 20, // Adjust the height of the line as needed
+                            color: Colors.white, // Set the color of the line
+                          ),
+                          Expanded(
+                            child: Text(
+                              'Privacy Policy',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: 'PlayfairDisplay',
+                                fontWeight: FontWeight.w400,
+                                fontSize: 11,
+                              ),
+                            ),
+                          ),
+                          Container(
+                            width: 2, // Adjust the width of the line as needed
+                            height: 20, // Adjust the height of the line as needed
+                            color: Colors.white, // Set the color of the line
+                          ),
+                          Expanded(
+                            child: Text(
+                              'Be safe online',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: 'PlayfairDisplay',
+                                fontWeight: FontWeight.w400,
+                                fontSize: 11,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Text(
+                          'Passionately created by Megma IT',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: 'PlayfairDisplay',
+                            fontWeight: FontWeight.w600,
+                            fontSize: 11,
+                          ),
+                        ),
+                      )
+
+                    ],
+                  ),
+                ),
+
+              )
 
             ],
           ),
