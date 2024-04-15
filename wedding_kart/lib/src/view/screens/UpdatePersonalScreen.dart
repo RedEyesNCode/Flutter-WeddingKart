@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:wedding_kart/src/view/screens/UpdateCareerScreen.dart';
 import 'package:wedding_kart/src/view/widgets/SingleSelectableChipGroup.dart';
 
 
@@ -9,9 +10,7 @@ class UpdatePersonalScreen extends StatelessWidget{
   Widget build(BuildContext context) {
     // TODO: implement build
 
-    return MaterialApp(
-      home: UpdatePersonalScreenUI(),
-    );
+    return UpdatePersonalScreenUI();
   }
 
 
@@ -158,7 +157,8 @@ class _UpdatePersonalScreenState extends State<UpdatePersonalScreenUI>{
                 Expanded(
                   child: Padding(
                     padding: EdgeInsets.all(8.0),
-                    child: TextField(
+                    child:
+                    TextField(
                       controller: _controllerFirstName,
                       keyboardType: TextInputType.name,
                       decoration: InputDecoration(
@@ -337,7 +337,7 @@ class _UpdatePersonalScreenState extends State<UpdatePersonalScreenUI>{
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => UpdatePersonalScreen()),
+                    MaterialPageRoute(builder: (context) => UpdateCareerScreen()),
                   );
                 },
                 child: Text(

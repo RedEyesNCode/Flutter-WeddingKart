@@ -10,9 +10,7 @@ import 'package:wedding_kart/src/view/widgets/OptionsSheet.dart';
 class RegisterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: RegisterScreenUI(),
-    );
+    return RegisterScreenUI();
   }
 }
 
@@ -123,27 +121,27 @@ class _RegisterScreenState extends State<RegisterScreenUI> {
                 fontSize: 24,
               ),
             ),
-            ElevatedButton(
-              onPressed: () {
-                // Add your registration logic here
-                try {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => MyApp()),
-                  );
-                } catch (e) {
-                  print('Failed to navigate: $e');
-                }
-              },
-              child: Text('Login',
-                  style: TextStyle(
-                    color: Colors.redAccent,
-                    fontFamily: 'PlayfairDisplay',
-                    fontWeight: FontWeight.w700,
-                    fontSize: 16,
-                  )),
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.white),
-            ),
+            // ElevatedButton(
+            //   onPressed: () {
+            //     // Add your registration logic here
+            //     try {
+            //       Navigator.push(
+            //         context,
+            //         MaterialPageRoute(builder: (context) => MyApp()),
+            //       );
+            //     } catch (e) {
+            //       print('Failed to navigate: $e');
+            //     }
+            //   },
+            //   child: Text('Login',
+            //       style: TextStyle(
+            //         color: Colors.redAccent,
+            //         fontFamily: 'PlayfairDisplay',
+            //         fontWeight: FontWeight.w700,
+            //         fontSize: 16,
+            //       )),
+            //   style: ElevatedButton.styleFrom(backgroundColor: Colors.white),
+            // ),
           ],
         ),
         backgroundColor: Colors.redAccent,
