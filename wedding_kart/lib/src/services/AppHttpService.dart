@@ -1,25 +1,57 @@
 import 'dart:convert';
+import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:wedding_kart/src/model/RegisterResponse.dart';
+import 'package:wedding_kart/src/services/base_service.dart';
+import 'package:wedding_kart/src/utils/app_exception.dart';
 
-class AppHttpService {
-  static final String baseUrl = 'http://localhost:3577/spring-wedding';
+class AppHttpService extends BaseService {
+  @override
+  Future getResponse(String url) async {
+    dynamic responseJson;
+    try {
+      final response = await http.get(Uri.parse(BaseUrl + url));
+      responseJson = returnResponse(response);
+    } on SocketException {
+      throw FetchDataException('No Internet Connection');
+    }
+    return responseJson;
+  }
 
-  static Future<RegisterResponse> registerUser(Map<String, dynamic> userData) async {
-    final String url = '$baseUrl/login-user';
+  @override
+  Future<dynamic> registerUser(Map<String, dynamic> userData) async {
+    try {
+      final response = await http.post(
+        Uri.parse(BaseUrl + 'create-new-user'), // Adjust the endpoint accordingly
+        body: jsonEncode(userData),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      );
 
-    final response = await http.post(
-      Uri.parse(url),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(userData),
-    );
+      return returnResponse(response);
+    } on SocketException {
+      throw FetchDataException('No Internet Connection');
+    }
+  }
 
-    if (response.statusCode == 200) {
-      return RegisterResponse.fromJson(jsonDecode(response.body));
-    } else {
-      throw Exception('Failed to register user');
+  @visibleForTesting
+  dynamic returnResponse(http.Response response) {
+    switch (response.statusCode) {
+      case 200:
+        dynamic responseJson = jsonDecode(response.body);
+        return responseJson;
+      case 400:
+        throw BadRequestException(response.body.toString());
+      case 401:
+      case 403:
+        throw UnauthorisedException(response.body.toString());
+      case 500:
+      default:
+        throw FetchDataException(
+            'Error occured while communication with server' +
+                ' with status code : ${response.statusCode}');
     }
   }
 }

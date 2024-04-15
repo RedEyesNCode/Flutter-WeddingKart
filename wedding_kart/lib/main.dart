@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:wedding_kart/src/model/RegisterResponse.dart';
+import 'package:wedding_kart/src/utils/api_response.dart';
 import 'package:wedding_kart/src/view/screens/DashboardScreen.dart';
 import 'package:wedding_kart/src/view/screens/RegisterScreen.dart';
 import 'package:wedding_kart/src/viewmodel/UserViewModel.dart';
@@ -12,7 +13,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: HomeScreen(),
+      home: MultiProvider(
+        providers: [
+          ChangeNotifierProvider.value(value: UserViewModel()),
+        ],
+        child: HomeScreen(),
+      ),
     );
   }
 }
@@ -108,6 +114,8 @@ class _HomeScreenState extends State<HomeScreen> {
       'password': 'pass11',
       // Add other user data fields as needed
     };
+    final userViewModel = Provider.of<UserViewModel>(context);
+
     void _handleSuccess(RegisterResponse response) {
       // Access properties of the response and handle success
       print('Registration successful: ${response.message}');
@@ -344,8 +352,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                             ),
                                             child:
 
-                                            ChangeNotifierProvider(
-                                              create: (_) => UserViewModel(), // Provide an instance of UserViewModel
+                                            MultiProvider(
+                                              providers: [
+                                                ChangeNotifierProvider.value(value: UserViewModel()),
+                                              ], // Provide an instance of UserViewModel
 
                                               child: TextButton(
                                                 style: ButtonStyle(
@@ -366,7 +376,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       Colors.white),
 
                                                 ),
-                                                onPressed: () async {
+                                                onPressed: ()  {
                                                   // Step 4: Use the controller to do something with the input
                                                   var email =
                                                   _controllerEmail.text.toString();
@@ -380,16 +390,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   } else {
                                                     //navigate to dashboard screen
                                                     // Call the login API
-                                                    try {
-                                                      final response = await Provider.of<UserViewModel>(context,listen: false).registerUser(userData);
 
+                                                    userViewModel.registerUser({
+                                                      'fullName': _controllerEmail.text,
+                                                      'telephoneNumber': _controllerPassword.text,
+                                                      'emailAddress' : _controllerEmail.text
+                                                      // Add other user data as needed
+                                                    });
 
-                                                      // Handle success
-                                                      _handleSuccess(response);
-                                                    } catch (error) {
-                                                      // Handle error
-                                                      _handleError(error);
-                                                    }
 
                                                   }
                                                 },
@@ -403,11 +411,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       fontSize: 21),
                                                 ),
                                               ),
+
                                             ),
 
                                           ),
+
                                         ],
                                       ),
+                                      // if (userViewModel.response.status == Status.COMPLETED)
+                                      //   Text('Register Response: ${userViewModel.registerResponse?.status ?? 'N/A'}'),
+                                      // if (userViewModel.response.status == Status.ERROR)
+                                      //   Text('Error: ${userViewModel.response.message}'),
                                       SizedBox(
                                         height: 20,
                                       ),
