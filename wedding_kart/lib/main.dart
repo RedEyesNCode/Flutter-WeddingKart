@@ -342,62 +342,69 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 ], // Adjust colors as needed
                                               ),
                                             ),
-                                            child: TextButton(
-                                              style: ButtonStyle(
-                                                shape: MaterialStateProperty.all<
-                                                    OutlinedBorder>(
-                                                  RoundedRectangleBorder(
-                                                    borderRadius: BorderRadius.circular(15.0), // Set all corners to zero for square corners
+                                            child:
+
+                                            ChangeNotifierProvider(
+                                              create: (_) => UserViewModel(), // Provide an instance of UserViewModel
+
+                                              child: TextButton(
+                                                style: ButtonStyle(
+                                                  shape: MaterialStateProperty.all<
+                                                      OutlinedBorder>(
+                                                    RoundedRectangleBorder(
+                                                      borderRadius: BorderRadius.circular(15.0), // Set all corners to zero for square corners
+                                                    ),
                                                   ),
+                                                  backgroundColor:
+                                                  MaterialStateProperty.all<Color>(
+                                                      Colors.transparent),
+                                                  overlayColor:
+                                                  MaterialStateProperty.all<Color>(
+                                                      Colors.transparent),
+                                                  foregroundColor:
+                                                  MaterialStateProperty.all<Color>(
+                                                      Colors.white),
+
                                                 ),
-                                                backgroundColor:
-                                                MaterialStateProperty.all<Color>(
-                                                    Colors.transparent),
-                                                overlayColor:
-                                                MaterialStateProperty.all<Color>(
-                                                    Colors.transparent),
-                                                foregroundColor:
-                                                MaterialStateProperty.all<Color>(
-                                                    Colors.white),
+                                                onPressed: () async {
+                                                  // Step 4: Use the controller to do something with the input
+                                                  var email =
+                                                  _controllerEmail.text.toString();
+                                                  var password =
+                                                  _controllerPassword.text.toString();
 
-                                              ),
-                                              onPressed: () async {
-                                                // Step 4: Use the controller to do something with the input
-                                                var email =
-                                                _controllerEmail.text.toString();
-                                                var password =
-                                                _controllerPassword.text.toString();
-
-                                                if (email.isEmpty) {
-                                                  showAlertDialog(context);
-                                                } else if (password.isEmpty) {
-                                                  showAlertDialog(context);
-                                                } else {
-                                                  //navigate to dashboard screen
-                                                  // Call the login API
-                                                  try {
-                                                    final response = await Provider.of<UserViewModel>(context,listen: false).registerUser(userData);
+                                                  if (email.isEmpty) {
+                                                    showAlertDialog(context);
+                                                  } else if (password.isEmpty) {
+                                                    showAlertDialog(context);
+                                                  } else {
+                                                    //navigate to dashboard screen
+                                                    // Call the login API
+                                                    try {
+                                                      final response = await Provider.of<UserViewModel>(context,listen: false).registerUser(userData);
 
 
-                                                    // Handle success
-                                                    _handleSuccess(response);
-                                                  } catch (error) {
-                                                    // Handle error
-                                                    _handleError(error);
+                                                      // Handle success
+                                                      _handleSuccess(response);
+                                                    } catch (error) {
+                                                      // Handle error
+                                                      _handleError(error);
+                                                    }
+
                                                   }
-
-                                                }
-                                              },
-                                              child: Text(
-                                                "Login",
-                                                textAlign: TextAlign.start,
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontFamily: 'PlayfairDisplay',
-                                                    fontWeight: FontWeight.w800,
-                                                    fontSize: 21),
+                                                },
+                                                child: Text(
+                                                  "Login",
+                                                  textAlign: TextAlign.start,
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontFamily: 'PlayfairDisplay',
+                                                      fontWeight: FontWeight.w800,
+                                                      fontSize: 21),
+                                                ),
                                               ),
                                             ),
+
                                           ),
                                         ],
                                       ),

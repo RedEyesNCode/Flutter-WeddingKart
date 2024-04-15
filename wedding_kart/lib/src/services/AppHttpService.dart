@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:wedding_kart/src/model/RegisterResponse.dart';
 
-class ChopperService {
+class AppHttpService {
   static final String baseUrl = 'http://localhost:3577/spring-wedding';
 
   static Future<RegisterResponse> registerUser(Map<String, dynamic> userData) async {
