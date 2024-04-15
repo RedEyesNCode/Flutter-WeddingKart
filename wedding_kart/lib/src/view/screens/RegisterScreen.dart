@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:wedding_kart/main.dart';
 import 'package:wedding_kart/src/view/screens/DashboardScreen.dart';
+import 'package:wedding_kart/src/view/screens/UpdateSocialScreen.dart';
 import 'package:wedding_kart/src/view/widgets/CustomCardWidget.dart';
 import 'package:wedding_kart/src/view/widgets/ImageCard.dart';
 import 'package:wedding_kart/src/view/widgets/OptionsSheet.dart';
@@ -335,7 +336,10 @@ class _RegisterScreenState extends State<RegisterScreenUI> {
                                                     ),
                                                 onPressed: () {
                                                   // Step 4: Use the controller to do something with the input
-
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(builder: (context) => UpdateSocialScreen()),
+                                                  );
                                                 },
                                                 child: Text(
                                                   "Let's Begin",

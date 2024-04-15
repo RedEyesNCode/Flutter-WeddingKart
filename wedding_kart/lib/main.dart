@@ -219,7 +219,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                           Padding(
                                             padding: EdgeInsets.only(
                                                 left: 5, right: 20, top: 20),
-                                            child: Text(
+                                            child:
+                                            Text(
                                               "Welcome back!",
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
@@ -269,7 +270,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                       if (_isEmail)
                                         Padding(
                                           padding: EdgeInsets.only(left: 10),
-                                          child: TextField(
+                                          child:
+                                          TextField(
                                             controller: _controllerEmail,
                                             keyboardType: TextInputType.emailAddress,
                                             decoration: InputDecoration(
