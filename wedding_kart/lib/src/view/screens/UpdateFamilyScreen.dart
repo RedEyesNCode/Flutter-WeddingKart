@@ -1,31 +1,31 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:wedding_kart/src/view/screens/UpdateFamilyScreen.dart';
+import 'package:wedding_kart/src/view/screens/DashboardScreen.dart';
 import 'package:wedding_kart/src/view/widgets/SingleSelectableChipGroup.dart';
 
-
-class UpdateCareerScreen extends StatelessWidget{
+class UpdateFamilyScreen extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
 
-    return UpdateCareerScreenUI();
+    return UpdateFamilyScreenUI();
   }
 
 }
 
-class UpdateCareerScreenUI extends StatefulWidget{
+class UpdateFamilyScreenUI extends StatefulWidget {
 
   @override
-  _UpdateCareerScreenUI createState() => _UpdateCareerScreenUI();
+  _UpdateFamilyScreenUI createState() => _UpdateFamilyScreenUI();
 
 }
 
-class _UpdateCareerScreenUI extends State<UpdateCareerScreenUI>{
+class _UpdateFamilyScreenUI extends State<UpdateFamilyScreenUI>{
 
-  String _selectedEducation = 'Bachelors';
-  String _selectedCourse = 'Commerce';
+  String _selectedFatherStatus = 'Employed';
+  String _selectedMotherStatus = 'Employed';
+
   @override
   Widget build(BuildContext context) {
 
@@ -41,7 +41,7 @@ class _UpdateCareerScreenUI extends State<UpdateCareerScreenUI>{
               Navigator.pop(context);
             }, icon: Icon(Icons.arrow_back_ios),color: Colors.white,),
             Text(
-              "Career Details",
+              "Family Details",
               style: TextStyle(
                 color: Colors.white,
                 fontFamily: 'PlayfairDisplay',
@@ -63,7 +63,7 @@ class _UpdateCareerScreenUI extends State<UpdateCareerScreenUI>{
                   padding: const EdgeInsets.only(left: 8.0),
                   child:
                   Text(
-                    "Highest Education",
+                    "Father Status",
                     textAlign: TextAlign.start,
                     style: TextStyle(
                         color: Colors.black,
@@ -82,14 +82,14 @@ class _UpdateCareerScreenUI extends State<UpdateCareerScreenUI>{
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   SingleSelectableChipGroup(
-                    options: ['Doctorate', 'Masters','Bachelors','Diploma','High School'],
+                    options: ['Employed', 'Retired','Business','Not Employed','Passed Away'],
 
                     onChanged: (selectedOption) {
                       setState(() {
-                        _selectedEducation = selectedOption;
+                        _selectedFatherStatus = selectedOption;
                       });
                     },
-                    selectedOption: _selectedEducation,
+                    selectedOption: _selectedFatherStatus,
                   ),
                 ],
               ),
@@ -102,7 +102,7 @@ class _UpdateCareerScreenUI extends State<UpdateCareerScreenUI>{
                 Padding(
                   padding: EdgeInsets.only(left: 10.0),
                   child: Text(
-                    "Course ",
+                    "Mother Status ",
                     textAlign: TextAlign.start,
                     style: TextStyle(
                         color: Colors.black,
@@ -121,47 +121,19 @@ class _UpdateCareerScreenUI extends State<UpdateCareerScreenUI>{
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   SingleSelectableChipGroup(
-                    options: ['Engineering', 'Information Tech','Commerce','Arts','Defense'],
+                    options: ['Employed', 'Retired','Business','Not Employed','Passed Away'],
 
                     onChanged: (selectedOption) {
                       setState(() {
-                        _selectedCourse = selectedOption;
+                        _selectedMotherStatus = selectedOption;
                       });
                     },
-                    selectedOption: _selectedCourse,
+                    selectedOption: _selectedMotherStatus,
                   ),
                 ],
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 8.0),
-                  child: Text(
-                    "Work Experience!",
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontFamily: 'PlayfairDisplay',
-                        fontWeight: FontWeight.w700,
-                        fontSize: 18),
-                  ),
-                ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                keyboardType: TextInputType.name,
-                decoration: InputDecoration(
-                  labelText: 'Job Title',
-                  hintText: '',
-                  helperText: '',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-            ),
+
             SizedBox(height: 5,),
 
             Padding(
@@ -169,21 +141,7 @@ class _UpdateCareerScreenUI extends State<UpdateCareerScreenUI>{
               child: TextField(
                 keyboardType: TextInputType.name,
                 decoration: InputDecoration(
-                  labelText: 'Work In',
-                  hintText: '',
-                  helperText: '',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-            ),
-            SizedBox(height: 5,),
-
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                keyboardType: TextInputType.name,
-                decoration: InputDecoration(
-                  labelText: 'Company Name',
+                  labelText: 'No of brothers',
                   hintText: '',
                   helperText: '',
                   border: OutlineInputBorder(),
@@ -193,9 +151,9 @@ class _UpdateCareerScreenUI extends State<UpdateCareerScreenUI>{
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: TextField(
-                keyboardType: TextInputType.name,
+                keyboardType: TextInputType.number,
                 decoration: InputDecoration(
-                  labelText: 'Annual Income',
+                  labelText: 'No of Sisters',
                   hintText: '',
                   helperText: '',
                   border: OutlineInputBorder(),
@@ -231,7 +189,7 @@ class _UpdateCareerScreenUI extends State<UpdateCareerScreenUI>{
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => UpdateFamilyScreen()),
+                    MaterialPageRoute(builder: (context) => DashboardScreen()),
                   );
                 },
                 child: Text(
@@ -251,6 +209,9 @@ class _UpdateCareerScreenUI extends State<UpdateCareerScreenUI>{
         ),
       ),
     );
+
+
+
   }
 
 

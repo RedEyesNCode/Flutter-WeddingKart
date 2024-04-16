@@ -96,7 +96,10 @@ class _UpdateSocialScreenState extends State<UpdateSocialScreenUI>{
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
+      backgroundColor: Colors.white,
+
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.redAccent,
         title: Row(
           children: [

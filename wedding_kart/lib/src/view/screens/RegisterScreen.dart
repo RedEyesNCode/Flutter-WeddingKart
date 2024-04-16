@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:wedding_kart/main.dart';
+import 'package:wedding_kart/src/view/screens/CreateUserScreen.dart';
 import 'package:wedding_kart/src/view/screens/DashboardScreen.dart';
 import 'package:wedding_kart/src/view/screens/UpdateSocialScreen.dart';
 import 'package:wedding_kart/src/view/widgets/CustomCardWidget.dart';
@@ -336,7 +337,7 @@ class _RegisterScreenState extends State<RegisterScreenUI> {
                                                   // Step 4: Use the controller to do something with the input
                                                   Navigator.push(
                                                     context,
-                                                    MaterialPageRoute(builder: (context) => UpdateSocialScreen()),
+                                                    MaterialPageRoute(builder: (context) => CreateUserScreen()),
                                                   );
                                                 },
                                                 child: Text(

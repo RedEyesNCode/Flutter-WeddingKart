@@ -124,19 +124,17 @@ class _HomeScreenState extends State<HomeScreen> {
       // Add other user data fields as needed
 
     };
-    final userViewModel = Provider.of<UserViewModel>(context);
+    final userViewModel = Provider.of<UserViewModel>(context,listen: true);
 
 
-
+    if (userViewModel.response.status == Status.LOADING) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        LoadingUtil.showLoading(context);
+      });
+    } else {
+      _closeLoadingDialogIfNeeded();
+    }
     switch (userViewModel.response.status) {
-      case Status.LOADING:
-        if (!isLoadingShown) {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            LoadingUtil.showLoading(context);
-            isLoadingShown = true;
-          });
-        }
-        break;
       case Status.COMPLETED:
         _handleCompleted(userViewModel);
         break;
@@ -144,13 +142,13 @@ class _HomeScreenState extends State<HomeScreen> {
         _handleError();
         break;
       default:
-        _closeLoadingDialogIfNeeded();
         break;
     }
 
-
     return Scaffold(
-      appBar: AppBar(
+        backgroundColor: Colors.white,
+
+        appBar: AppBar(
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -652,6 +650,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _handleError() {
     _closeLoadingDialogIfNeeded();
+    _controllerEmail.text = "";
+    _controllerPassword.text = "";
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       DialogUtil.showDialogWithOk(
         context: context,
