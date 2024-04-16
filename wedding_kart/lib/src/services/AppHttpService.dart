@@ -20,10 +20,28 @@ class AppHttpService extends BaseService {
   }
 
   @override
+  Future loginUser(Map<String, dynamic> userData) async {
+    // TODO: implement loginUser
+    try {
+      final response = await http.post(
+        Uri.parse(BaseUrl + 'login-user'), // Adjust the endpoint accordingly
+        body: jsonEncode(userData),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      );
+
+      return returnResponse(response);
+    } on SocketException {
+      throw FetchDataException('No Internet Connection');
+    }
+  }
+
+  @override
   Future<dynamic> registerUser(Map<String, dynamic> userData) async {
     try {
       final response = await http.post(
-        Uri.parse(BaseUrl + 'create-new-user'), // Adjust the endpoint accordingly
+        Uri.parse(BaseUrl + 'register-user'), // Adjust the endpoint accordingly
         body: jsonEncode(userData),
         headers: {
           'Content-Type': 'application/json',

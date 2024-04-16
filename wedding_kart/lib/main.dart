@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:wedding_kart/src/model/RegisterResponse.dart';
+import 'package:wedding_kart/src/utils/DialogUtil.dart';
+import 'package:wedding_kart/src/utils/LoadingUtil.dart';
 import 'package:wedding_kart/src/utils/api_response.dart';
 import 'package:wedding_kart/src/view/screens/DashboardScreen.dart';
 import 'package:wedding_kart/src/view/screens/RegisterScreen.dart';
@@ -72,6 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
   // Step 1: Declare a TextEditingController
   final TextEditingController _controllerEmail = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();
+  bool isLoadingShown = false;
 
   bool _isEmail = true;
   bool _isNumber = false;
@@ -109,24 +112,43 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final Map<String, dynamic> userData = {
-      'email': 'test@gmail.com',
-      'password': 'pass11',
+    final Map<String, dynamic> userDataEmail = {
+      'email': _controllerEmail.text.toString(),
+      'password': _controllerPassword.text.toString(),
       // Add other user data fields as needed
+
+    };
+    final Map<String, dynamic> userDataMobile = {
+      'mobile': _controllerEmail.text.toString(),
+      'password': _controllerPassword.text.toString(),
+      // Add other user data fields as needed
+
     };
     final userViewModel = Provider.of<UserViewModel>(context);
 
-    void _handleSuccess(RegisterResponse response) {
-      // Access properties of the response and handle success
-      print('Registration successful: ${response.message}');
-      // Navigate to another screen, show a success message, etc.
+
+
+    switch (userViewModel.response.status) {
+      case Status.LOADING:
+        if (!isLoadingShown) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            LoadingUtil.showLoading(context);
+            isLoadingShown = true;
+          });
+        }
+        break;
+      case Status.COMPLETED:
+        _handleCompleted(userViewModel);
+        break;
+      case Status.ERROR:
+        _handleError();
+        break;
+      default:
+        _closeLoadingDialogIfNeeded();
+        break;
     }
 
-    void _handleError(dynamic error) {
-      // Handle error
-      print('Registration failed: $error');
-      // Show an error message to the user, retry registration, etc.
-    }
+
     return Scaffold(
       appBar: AppBar(
         title: Row(
@@ -167,7 +189,6 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: Colors.redAccent,
       ),
       body:
-
           ChangeNotifierProvider
             (
             create: (context) => UserViewModel(),
@@ -185,415 +206,422 @@ class _HomeScreenState extends State<HomeScreen> {
                     ], // Adjust colors as needed
                   ),
                 ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                child:
+
+
+
+                Stack(
                   children: [
-                    SizedBox(
-                      height: 25,
-                    ),
-                    Row(
+
+                    Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       mainAxisSize: MainAxisSize.max,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         SizedBox(
-                          width: 350,
-                          height: null,
-                          child: Card(
-                            color: Colors.white,
-                            elevation: 5,
-                            child: Padding(
-                              padding: EdgeInsets.all(10),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Column(
+                          height: 25,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.max,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              width: 350,
+                              height: null,
+                              child: Card(
+                                color: Colors.white,
+                                elevation: 5,
+                                child: Padding(
+                                  padding: EdgeInsets.all(10),
+                                  child: Column(
                                     mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
-                                      Row(
+                                      Column(
+                                        mainAxisSize: MainAxisSize.max,
                                         mainAxisAlignment: MainAxisAlignment.start,
                                         children: [
-                                          Padding(
-                                            padding: EdgeInsets.only(
-                                                left: 5, right: 20, top: 20),
-                                            child:
-                                            Text(
-                                              "Welcome back!",
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontFamily: 'PlayfairDisplay',
-                                                  fontWeight: FontWeight.w700,
-                                                  fontSize: 18),
-                                            ),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            children: [
+                                              Padding(
+                                                padding: EdgeInsets.only(
+                                                    left: 5, right: 20, top: 20),
+                                                child:
+                                                Text(
+                                                  "Welcome back!",
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontFamily: 'PlayfairDisplay',
+                                                      fontWeight: FontWeight.w700,
+                                                      fontSize: 18),
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                        ],
-                                      ),
-                                      SizedBox(height: 20),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        children: [
+                                          SizedBox(height: 20),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            children: [
+                                              if (_isEmail)
+                                                const Padding(
+                                                  padding: EdgeInsets.only(left: 10),
+                                                  child: Text(
+                                                    "Enter your email to login in",
+                                                    textAlign: TextAlign.start,
+                                                    style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontFamily: 'PlayfairDisplay',
+                                                        fontWeight: FontWeight.normal,
+                                                        fontSize: 16),
+                                                  ),
+                                                ),
+                                              if (_isNumber)
+                                                const Padding(
+                                                  padding: EdgeInsets.only(left: 10),
+                                                  child: Text(
+                                                    "Enter your mobile to log in",
+                                                    textAlign: TextAlign.start,
+                                                    style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontFamily: 'PlayfairDisplay',
+                                                        fontWeight: FontWeight.normal,
+                                                        fontSize: 16),
+                                                  ),
+                                                )
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 20,
+                                          ),
                                           if (_isEmail)
-                                            const Padding(
+                                            Padding(
                                               padding: EdgeInsets.only(left: 10),
-                                              child: Text(
-                                                "Enter your email to login in",
-                                                textAlign: TextAlign.start,
-                                                style: TextStyle(
-                                                    color: Colors.black,
-                                                    fontFamily: 'PlayfairDisplay',
-                                                    fontWeight: FontWeight.normal,
-                                                    fontSize: 16),
+                                              child:
+                                              TextField(
+                                                controller: _controllerEmail,
+                                                keyboardType: TextInputType.emailAddress,
+                                                decoration: InputDecoration(
+                                                  labelText: 'Email Address',
+                                                  hintText: '',
+                                                  helperText: '',
+                                                  border: OutlineInputBorder(),
+                                                ),
                                               ),
                                             ),
                                           if (_isNumber)
-                                            const Padding(
+                                            Padding(
                                               padding: EdgeInsets.only(left: 10),
-                                              child: Text(
-                                                "Enter your mobile to log in",
-                                                textAlign: TextAlign.start,
-                                                style: TextStyle(
-                                                    color: Colors.black,
-                                                    fontFamily: 'PlayfairDisplay',
-                                                    fontWeight: FontWeight.normal,
-                                                    fontSize: 16),
-                                              ),
-                                            )
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 20,
-                                      ),
-                                      if (_isEmail)
-                                        Padding(
-                                          padding: EdgeInsets.only(left: 10),
-                                          child:
-                                          TextField(
-                                            controller: _controllerEmail,
-                                            keyboardType: TextInputType.emailAddress,
-                                            decoration: InputDecoration(
-                                              labelText: 'Email Address',
-                                              hintText: '',
-                                              helperText: '',
-                                              border: OutlineInputBorder(),
-                                            ),
-                                          ),
-                                        ),
-                                      if (_isNumber)
-                                        Padding(
-                                          padding: EdgeInsets.only(left: 10),
-                                          child: TextField(
-                                            controller: _controllerEmail,
-                                            keyboardType: TextInputType.number,
-                                            decoration: InputDecoration(
-                                              labelText: 'Mobile Number',
-                                              hintText: '',
-                                              helperText: '',
-                                              border: OutlineInputBorder(),
-                                            ),
-                                          ),
-                                        ),
-                                      SizedBox(
-                                        height: 20,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        children: [
-                                          Padding(
-                                            padding: EdgeInsets.only(left: 10),
-                                            child: Text(
-                                              "Enter Password",
-                                              textAlign: TextAlign.start,
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontFamily: 'PlayfairDisplay',
-                                                  fontWeight: FontWeight.normal,
-                                                  fontSize: 16),
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 20,
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.only(left: 10),
-                                        child: TextField(
-                                          controller: _controllerPassword,
-                                          decoration: InputDecoration(
-                                            labelText: 'Enter Password',
-                                            hintText: '',
-                                            helperText: '',
-                                            border: OutlineInputBorder(),
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 50,
-                                      ),
-                                      Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Container(
-                                            width: 300, // Set your desired width
-                                            height: 50, // Set your desired height
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(5),
-                                              gradient: LinearGradient(
-                                                begin: Alignment.topCenter,
-                                                end: Alignment.bottomCenter,
-                                                colors: [
-                                                  Color.fromRGBO(109, 36, 81, 1),
-                                                  Color.fromRGBO(146, 29, 38, 1)
-                                                ], // Adjust colors as needed
-                                              ),
-                                            ),
-                                            child:
-
-                                            MultiProvider(
-                                              providers: [
-                                                ChangeNotifierProvider.value(value: UserViewModel()),
-                                              ], // Provide an instance of UserViewModel
-
-                                              child: TextButton(
-                                                style: ButtonStyle(
-                                                  shape: MaterialStateProperty.all<
-                                                      OutlinedBorder>(
-                                                    RoundedRectangleBorder(
-                                                      borderRadius: BorderRadius.circular(15.0), // Set all corners to zero for square corners
-                                                    ),
-                                                  ),
-                                                  backgroundColor:
-                                                  MaterialStateProperty.all<Color>(
-                                                      Colors.transparent),
-                                                  overlayColor:
-                                                  MaterialStateProperty.all<Color>(
-                                                      Colors.transparent),
-                                                  foregroundColor:
-                                                  MaterialStateProperty.all<Color>(
-                                                      Colors.white),
-
+                                              child: TextField(
+                                                controller: _controllerEmail,
+                                                keyboardType: TextInputType.number,
+                                                decoration: InputDecoration(
+                                                  labelText: 'Mobile Number',
+                                                  hintText: '',
+                                                  helperText: '',
+                                                  border: OutlineInputBorder(),
                                                 ),
-                                                onPressed: ()  {
-                                                  // Step 4: Use the controller to do something with the input
-                                                  var email =
-                                                  _controllerEmail.text.toString();
-                                                  var password =
-                                                  _controllerPassword.text.toString();
-
-                                                  if (email.isEmpty) {
-                                                    showAlertDialog(context);
-                                                  } else if (password.isEmpty) {
-                                                    showAlertDialog(context);
-                                                  } else {
-                                                    //navigate to dashboard screen
-                                                    // Call the login API
-
-                                                    userViewModel.registerUser({
-                                                      'fullName': _controllerEmail.text,
-                                                      'telephoneNumber': _controllerPassword.text,
-                                                      'emailAddress' : _controllerEmail.text
-                                                      // Add other user data as needed
-                                                    });
-
-
-                                                  }
-                                                },
+                                              ),
+                                            ),
+                                          SizedBox(
+                                            height: 20,
+                                          ),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            children: [
+                                              Padding(
+                                                padding: EdgeInsets.only(left: 10),
                                                 child: Text(
-                                                  "Login",
+                                                  "Enter Password",
                                                   textAlign: TextAlign.start,
                                                   style: TextStyle(
-                                                      color: Colors.white,
+                                                      color: Colors.black,
                                                       fontFamily: 'PlayfairDisplay',
-                                                      fontWeight: FontWeight.w800,
-                                                      fontSize: 21),
+                                                      fontWeight: FontWeight.normal,
+                                                      fontSize: 16),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 20,
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.only(left: 10),
+                                            child: TextField(
+                                              controller: _controllerPassword,
+                                              decoration: InputDecoration(
+                                                labelText: 'Enter Password',
+                                                hintText: '',
+                                                helperText: '',
+                                                border: OutlineInputBorder(),
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 50,
+                                          ),
+                                          Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              Container(
+                                                width: 300, // Set your desired width
+                                                height: 50, // Set your desired height
+                                                decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius.circular(5),
+                                                  gradient: LinearGradient(
+                                                    begin: Alignment.topCenter,
+                                                    end: Alignment.bottomCenter,
+                                                    colors: [
+                                                      Color.fromRGBO(109, 36, 81, 1),
+                                                      Color.fromRGBO(146, 29, 38, 1)
+                                                    ], // Adjust colors as needed
+                                                  ),
+                                                ),
+                                                child:
+
+                                                MultiProvider(
+                                                  providers: [
+                                                    ChangeNotifierProvider.value(value: UserViewModel()),
+                                                  ], // Provide an instance of UserViewModel
+
+                                                  child: TextButton(
+                                                    style: ButtonStyle(
+                                                      shape: MaterialStateProperty.all<
+                                                          OutlinedBorder>(
+                                                        RoundedRectangleBorder(
+                                                          borderRadius: BorderRadius.circular(15.0), // Set all corners to zero for square corners
+                                                        ),
+                                                      ),
+                                                      backgroundColor:
+                                                      MaterialStateProperty.all<Color>(
+                                                          Colors.transparent),
+                                                      overlayColor:
+                                                      MaterialStateProperty.all<Color>(
+                                                          Colors.transparent),
+                                                      foregroundColor:
+                                                      MaterialStateProperty.all<Color>(
+                                                          Colors.white),
+
+                                                    ),
+                                                    onPressed: ()  {
+                                                      // Step 4: Use the controller to do something with the input
+                                                      var email =
+                                                      _controllerEmail.text.toString();
+                                                      var password =
+                                                      _controllerPassword.text.toString();
+
+                                                      if (email.isEmpty) {
+                                                        showAlertDialog(context);
+                                                      } else if (password.isEmpty) {
+                                                        showAlertDialog(context);
+                                                      } else {
+                                                        //navigate to dashboard screen
+                                                        // Call the login API
+
+                                                        if(_isNumber){
+                                                          userViewModel.loginUser(userDataMobile);
+
+                                                        }else{
+                                                          userViewModel.loginUser(userDataEmail);
+
+                                                        }
+
+
+                                                      }
+                                                    },
+                                                    child: Text(
+                                                      "Login",
+                                                      textAlign: TextAlign.start,
+                                                      style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontFamily: 'PlayfairDisplay',
+                                                          fontWeight: FontWeight.w800,
+                                                          fontSize: 21),
+                                                    ),
+                                                  ),
+
+                                                ),
+
+                                              ),
+
+                                            ],
+                                          ),
+
+                                          SizedBox(
+                                            height: 20,
+                                          ),
+                                          Stack(
+                                            alignment: Alignment.center,
+                                            children: [
+                                              Padding(
+                                                padding: EdgeInsets.all(10),
+                                                child: Text(
+                                                  "OR",
+                                                  textAlign: TextAlign.start,
+                                                  style: TextStyle(
+                                                      color: Colors.redAccent,
+                                                      fontFamily: 'PlayfairDisplay',
+                                                      fontWeight: FontWeight.w900,
+                                                      fontSize: 23),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 12,
+                                          ),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              Container(
+                                                width: 300, // Set your desired width
+                                                height: 50, // Set your desired height
+                                                decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius.circular(5),
+                                                  gradient: LinearGradient(
+                                                    begin: Alignment.topCenter,
+                                                    end: Alignment.bottomCenter,
+                                                    colors: [
+                                                      Color.fromRGBO(109, 36, 81, 1),
+                                                      Color.fromRGBO(146, 29, 38, 1)
+                                                    ], // Adjust colors as needed
+                                                  ),
+                                                ),
+                                                child: TextButton(
+                                                  style: ButtonStyle(
+
+                                                      padding: MaterialStateProperty.all<
+                                                          EdgeInsetsGeometry>(
+                                                          EdgeInsets.only(
+                                                              left: 35,
+                                                              right: 35,
+                                                              top: 10,
+                                                              bottom:
+                                                              10)) // Set your desired color
+                                                  ),
+                                                  onPressed: () {
+                                                    toggleVisibility();
+                                                  },
+                                                  child: Text(
+                                                    _textButtonToggle,
+                                                    textAlign: TextAlign.start,
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontFamily: 'PlayfairDisplay',
+                                                        fontWeight: FontWeight.w800,
+                                                        fontSize: 21),
+                                                  ),
                                                 ),
                                               ),
-
-                                            ),
-
-                                          ),
-
-                                        ],
-                                      ),
-                                      // if (userViewModel.response.status == Status.COMPLETED)
-                                      //   Text('Register Response: ${userViewModel.registerResponse?.status ?? 'N/A'}'),
-                                      // if (userViewModel.response.status == Status.ERROR)
-                                      //   Text('Error: ${userViewModel.response.message}'),
-                                      SizedBox(
-                                        height: 20,
-                                      ),
-                                      Stack(
-                                        alignment: Alignment.center,
-                                        children: [
-                                          Padding(
-                                            padding: EdgeInsets.all(10),
-                                            child: Text(
-                                              "OR",
-                                              textAlign: TextAlign.start,
-                                              style: TextStyle(
-                                                  color: Colors.redAccent,
-                                                  fontFamily: 'PlayfairDisplay',
-                                                  fontWeight: FontWeight.w900,
-                                                  fontSize: 23),
-                                            ),
+                                            ],
                                           )
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 12,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: [
-                                          Container(
-                                            width: 300, // Set your desired width
-                                            height: 50, // Set your desired height
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(5),
-                                              gradient: LinearGradient(
-                                                begin: Alignment.topCenter,
-                                                end: Alignment.bottomCenter,
-                                                colors: [
-                                                  Color.fromRGBO(109, 36, 81, 1),
-                                                  Color.fromRGBO(146, 29, 38, 1)
-                                                ], // Adjust colors as needed
-                                              ),
-                                            ),
-                                            child: TextButton(
-                                              style: ButtonStyle(
-
-                                                  padding: MaterialStateProperty.all<
-                                                      EdgeInsetsGeometry>(
-                                                      EdgeInsets.only(
-                                                          left: 35,
-                                                          right: 35,
-                                                          top: 10,
-                                                          bottom:
-                                                          10)) // Set your desired color
-                                              ),
-                                              onPressed: () {
-                                                toggleVisibility();
-                                              },
-                                              child: Text(
-                                                _textButtonToggle,
-                                                textAlign: TextAlign.start,
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontFamily: 'PlayfairDisplay',
-                                                    fontWeight: FontWeight.w800,
-                                                    fontSize: 21),
-                                              ),
-                                            ),
-                                          ),
                                         ],
                                       )
                                     ],
-                                  )
-                                ],
+                                  ),
+                                ),
                               ),
+                            )
+                          ],
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Divider(
+                          height: 2,
+                          thickness: 1,
+                          color: Colors.white,
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                'Contact us',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'PlayfairDisplay',
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 11,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              width: 2, // Adjust the width of the line as needed
+                              height: 20, // Adjust the height of the line as needed
+                              color: Colors.white, // Set the color of the line
+                            ),
+                            Expanded(
+                              child: Text(
+                                'Terms & Conditions',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'PlayfairDisplay',
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 11,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              width: 2, // Adjust the width of the line as needed
+                              height: 20, // Adjust the height of the line as needed
+                              color: Colors.white, // Set the color of the line
+                            ),
+                            Expanded(
+                              child: Text(
+                                'Privacy Policy',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'PlayfairDisplay',
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 11,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              width: 2, // Adjust the width of the line as needed
+                              height: 20, // Adjust the height of the line as needed
+                              color: Colors.white, // Set the color of the line
+                            ),
+                            Expanded(
+                              child: Text(
+                                'Be safe online',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'PlayfairDisplay',
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 11,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: Text(
+                            'Passionately created by Megma IT',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontFamily: 'PlayfairDisplay',
+                              fontWeight: FontWeight.w600,
+                              fontSize: 11,
                             ),
                           ),
                         )
                       ],
                     ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Divider(
-                      height: 2,
-                      thickness: 1,
-                      color: Colors.white,
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Expanded(
-                          child: Text(
-                            'Contact us',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: 'PlayfairDisplay',
-                              fontWeight: FontWeight.w400,
-                              fontSize: 11,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          width: 2, // Adjust the width of the line as needed
-                          height: 20, // Adjust the height of the line as needed
-                          color: Colors.white, // Set the color of the line
-                        ),
-                        Expanded(
-                          child: Text(
-                            'Terms & Conditions',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: 'PlayfairDisplay',
-                              fontWeight: FontWeight.w400,
-                              fontSize: 11,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          width: 2, // Adjust the width of the line as needed
-                          height: 20, // Adjust the height of the line as needed
-                          color: Colors.white, // Set the color of the line
-                        ),
-                        Expanded(
-                          child: Text(
-                            'Privacy Policy',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: 'PlayfairDisplay',
-                              fontWeight: FontWeight.w400,
-                              fontSize: 11,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          width: 2, // Adjust the width of the line as needed
-                          height: 20, // Adjust the height of the line as needed
-                          color: Colors.white, // Set the color of the line
-                        ),
-                        Expanded(
-                          child: Text(
-                            'Be safe online',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: 'PlayfairDisplay',
-                              fontWeight: FontWeight.w400,
-                              fontSize: 11,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: Text(
-                        'Passionately created by Megma IT',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'PlayfairDisplay',
-                          fontWeight: FontWeight.w600,
-                          fontSize: 11,
-                        ),
-                      ),
-                    )
                   ],
                 ),
               ),
@@ -602,4 +630,43 @@ class _HomeScreenState extends State<HomeScreen> {
           )
     );
   }
+  void _closeLoadingDialogIfNeeded() {
+    if (isLoadingShown && Navigator.of(context).canPop()) {
+      LoadingUtil.hideLoading(context);
+      isLoadingShown = false;
+    }
+  }
+  void _handleCompleted(UserViewModel userViewModel) {
+    _closeLoadingDialogIfNeeded();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      DialogUtil.showDialogWithOk(
+        context: context,
+        title: "Info",
+        message: userViewModel.loginResponse!.message.toString(),
+        onOk: () {
+          print("User pressed OK!");
+        },
+      );
+    });
+  }
+
+  void _handleError() {
+    _closeLoadingDialogIfNeeded();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      DialogUtil.showDialogWithOk(
+        context: context,
+        title: "Error",
+        message: "User not found!",
+        onOk: () {
+          print("User pressed OK!");
+        },
+      );
+    });
+  }
+  void _handleSuccess(RegisterResponse response) {
+    // Access properties of the response and handle success
+    print('Registration successful: ${response.message}');
+    // Navigate to another screen, show a success message, etc.
+  }
+
 }
