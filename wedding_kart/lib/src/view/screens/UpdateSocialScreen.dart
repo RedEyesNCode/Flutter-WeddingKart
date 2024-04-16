@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:wedding_kart/src/utils/DialogUtil.dart';
 import 'package:wedding_kart/src/view/screens/UpdatePersonalScreen.dart';
 import 'package:wedding_kart/src/view/widgets/OptionsSheet.dart';
 
@@ -248,10 +249,26 @@ class _UpdateSocialScreenState extends State<UpdateSocialScreenUI>{
                                 10)) // Set your desired color
                     ),
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => UpdatePersonalScreen()),
-                      );
+
+                      if(_controllerMotherTongue.text.isEmpty){
+                        DialogUtil.showAlertDialog(context, 'Select Mother Tongue');
+                      }else if(_controllerCommunity.text.isEmpty){
+                        DialogUtil.showAlertDialog(context, 'Select your community');
+                      }else if(_controllerMartialStatus.text.isEmpty){
+                        DialogUtil.showAlertDialog(context, 'Select your Martial Status');
+                      }else if(_controllerCurrentLocation.text.isEmpty){
+                        DialogUtil.showAlertDialog(context, 'Enter your current location');
+                      }else if(_controllerFamilyLocation.text.isEmpty){
+                        DialogUtil.showAlertDialog(context, 'Enter your family location');
+                      }else if(_controllerNativePlace.text.isEmpty){
+                        DialogUtil.showAlertDialog(context, 'Enter your native location');
+                      }else{
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => UpdatePersonalScreen()),
+                        );
+                      }
+
                     },
                     child: Text(
                       'Next',

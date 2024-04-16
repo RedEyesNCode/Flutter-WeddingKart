@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:wedding_kart/src/utils/DialogUtil.dart';
 import 'package:wedding_kart/src/view/screens/UpdateFamilyScreen.dart';
 import 'package:wedding_kart/src/view/widgets/SingleSelectableChipGroup.dart';
 
@@ -8,14 +9,12 @@ class UpdateCareerScreen extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-
     return UpdateCareerScreenUI();
   }
 
 }
 
-class UpdateCareerScreenUI extends StatefulWidget{
+class UpdateCareerScreenUI extends StatefulWidget {
 
   @override
   _UpdateCareerScreenUI createState() => _UpdateCareerScreenUI();
@@ -26,6 +25,12 @@ class _UpdateCareerScreenUI extends State<UpdateCareerScreenUI>{
 
   String _selectedEducation = 'Bachelors';
   String _selectedCourse = 'Commerce';
+  final TextEditingController _controllerJobTitle = TextEditingController();
+  final TextEditingController _controllerWorkIn = TextEditingController();
+  final TextEditingController _controllerCompanyName = TextEditingController();
+  final TextEditingController _controllerAnnualIncome = TextEditingController();
+
+
   @override
   Widget build(BuildContext context) {
 
@@ -150,9 +155,12 @@ class _UpdateCareerScreenUI extends State<UpdateCareerScreenUI>{
                 ),
               ],
             ),
+            SizedBox(height: 10,),
+
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: TextField(
+                controller: _controllerJobTitle,
                 keyboardType: TextInputType.name,
                 decoration: InputDecoration(
                   labelText: 'Job Title',
@@ -167,6 +175,8 @@ class _UpdateCareerScreenUI extends State<UpdateCareerScreenUI>{
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: TextField(
+                controller: _controllerWorkIn,
+
                 keyboardType: TextInputType.name,
                 decoration: InputDecoration(
                   labelText: 'Work In',
@@ -181,6 +191,8 @@ class _UpdateCareerScreenUI extends State<UpdateCareerScreenUI>{
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: TextField(
+                controller: _controllerCompanyName,
+
                 keyboardType: TextInputType.name,
                 decoration: InputDecoration(
                   labelText: 'Company Name',
@@ -193,6 +205,8 @@ class _UpdateCareerScreenUI extends State<UpdateCareerScreenUI>{
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: TextField(
+                controller: _controllerAnnualIncome,
+
                 keyboardType: TextInputType.name,
                 decoration: InputDecoration(
                   labelText: 'Annual Income',
@@ -229,10 +243,25 @@ class _UpdateCareerScreenUI extends State<UpdateCareerScreenUI>{
                             10)) // Set your desired color
                 ),
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => UpdateFamilyScreen()),
-                  );
+
+                  if(_controllerJobTitle.text.isEmpty){
+                    DialogUtil.showAlertDialog(context, 'Please enter job title');
+                  }else if(_controllerWorkIn.text.isEmpty){
+                    DialogUtil.showAlertDialog(context, 'Please enter work in');
+                  }else if(_controllerCompanyName.text.isEmpty){
+                    DialogUtil.showAlertDialog(context, 'Please enter company name');
+
+                  }else if(_controllerAnnualIncome.text.isEmpty){
+                    DialogUtil.showAlertDialog(context, 'Please enter annual income');
+
+                  }else{
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => UpdateFamilyScreen()),
+                    );
+                  }
+
+
                 },
                 child: Text(
                   'Next',

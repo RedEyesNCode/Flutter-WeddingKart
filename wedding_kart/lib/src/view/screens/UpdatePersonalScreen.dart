@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:wedding_kart/src/utils/DialogUtil.dart';
 import 'package:wedding_kart/src/view/screens/UpdateCareerScreen.dart';
 import 'package:wedding_kart/src/view/widgets/SingleSelectableChipGroup.dart';
 
@@ -34,8 +35,12 @@ class _UpdatePersonalScreenState extends State<UpdatePersonalScreenUI>{
 
     final TextEditingController _controllerFirstName = TextEditingController();
     final TextEditingController _controllerLastName = TextEditingController();
-    final TextEditingController _controllerDateofBirth = TextEditingController();
+    final TextEditingController _controllerDayOfBirth = TextEditingController();
+    final TextEditingController _controllerMonthOfBirth = TextEditingController();
+    final TextEditingController _controllerYearOfBirth = TextEditingController();
     final TextEditingController _controllerHeight = TextEditingController();
+    final TextEditingController _controllerHeightFeet = TextEditingController();
+    final TextEditingController _controllerHeightInches = TextEditingController();
 
 
     return Scaffold(
@@ -130,7 +135,7 @@ class _UpdatePersonalScreenState extends State<UpdatePersonalScreenUI>{
                         _selectedGender = selectedOption;
                       });
                     },
-                    selectedOption: _selectedOptionCreatedBy,
+                    selectedOption: _selectedGender,
                   ),
                 ],
               ),
@@ -216,6 +221,8 @@ class _UpdatePersonalScreenState extends State<UpdatePersonalScreenUI>{
                   child: Padding(
                     padding: EdgeInsets.all(8.0),
                     child: TextField(
+                      controller: _controllerDayOfBirth,
+
                       keyboardType: TextInputType.name,
                       decoration: InputDecoration(
                         labelText: 'Day',
@@ -230,6 +237,8 @@ class _UpdatePersonalScreenState extends State<UpdatePersonalScreenUI>{
                   child: Padding(
                     padding: EdgeInsets.all(8.0),
                     child: TextField(
+                      controller: _controllerMonthOfBirth,
+
                       keyboardType: TextInputType.name,
                       decoration: InputDecoration(
                         labelText: 'Month',
@@ -244,6 +253,8 @@ class _UpdatePersonalScreenState extends State<UpdatePersonalScreenUI>{
                   child: Padding(
                     padding: EdgeInsets.all(8.0),
                     child: TextField(
+                      controller: _controllerYearOfBirth,
+
                       keyboardType: TextInputType.name,
                       decoration: InputDecoration(
                         labelText: 'Year',
@@ -284,7 +295,7 @@ class _UpdatePersonalScreenState extends State<UpdatePersonalScreenUI>{
                   child: Padding(
                     padding: EdgeInsets.all(8.0),
                     child: TextField(
-                      controller: _controllerFirstName,
+                      controller: _controllerHeightFeet,
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
                         labelText: 'Feet',
@@ -299,6 +310,8 @@ class _UpdatePersonalScreenState extends State<UpdatePersonalScreenUI>{
                   child: Padding(
                     padding: EdgeInsets.all(8.0),
                     child: TextField(
+                      controller: _controllerHeightInches,
+
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
                         labelText: 'Inches',
@@ -338,10 +351,34 @@ class _UpdatePersonalScreenState extends State<UpdatePersonalScreenUI>{
                             10)) // Set your desired color
                 ),
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => UpdateCareerScreen()),
-                  );
+                  if(_selectedOptionCreatedBy.isEmpty){
+                    DialogUtil.showAlertDialog(context, 'Please select created by');
+                  }else if(_selectedGender.isEmpty){
+                    DialogUtil.showAlertDialog(context, 'Please select gender by');
+                  } else if(_controllerFirstName.text.isEmpty){
+                    DialogUtil.showAlertDialog(context, 'Please select first name');
+                  }else if(_controllerLastName.text.isEmpty){
+                    DialogUtil.showAlertDialog(context, 'Please enter last name');
+                  }else if(_controllerDayOfBirth.text.isEmpty){
+                    DialogUtil.showAlertDialog(context, 'Please enter day of birth');
+                  }else if(_controllerMonthOfBirth.text.isEmpty){
+                    DialogUtil.showAlertDialog(context, 'Please enter month of birth');
+
+                  }else if(_controllerYearOfBirth.text.isEmpty){
+                    DialogUtil.showAlertDialog(context, 'Please enter year of birth');
+
+                  }else if(_controllerHeightFeet.text.isEmpty){
+                    DialogUtil.showAlertDialog(context, 'Please enter Height Feet');
+
+                  }else if(_controllerHeightInches.text.isEmpty){
+                    DialogUtil.showAlertDialog(context, 'Please enter Height Inches');
+                  } else{
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => UpdateCareerScreen()),
+                    );
+                  }
+
                 },
                 child: Text(
                   'Next',

@@ -25,6 +25,46 @@ class DialogUtil {
       },
     );
   }
+  static void showAlertDialog(BuildContext context, String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext dialogContext) {
+        // Changed context to dialogContext
+        return AlertDialog(
+          title: Text("Info",
+              style: TextStyle(
+                color: Colors.black,
+                fontFamily: 'PlayfairDisplay',
+                fontWeight: FontWeight.w400,
+                fontSize: 18,
+              )),
+          content: Text(message,
+              style: TextStyle(
+                color: Colors.black,
+                fontFamily: 'PlayfairDisplay',
+                fontWeight: FontWeight.w400,
+                fontSize: 18,
+              )),
+          actions: [
+            TextButton(
+              child: Text(
+                "OK",
+                style: TextStyle(
+                    color: Colors.redAccent,
+                    fontFamily: 'PlayfairDisplay',
+                    fontWeight: FontWeight.w600,
+                    fontSize: 20),
+              ),
+              onPressed: () {
+                Navigator.of(dialogContext).pop(); // Use the dialogContext here
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
 
   static void hideDialog(BuildContext context) {
     if (Navigator.of(context).canPop()) {

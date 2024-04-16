@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:wedding_kart/src/utils/DialogUtil.dart';
 import 'package:wedding_kart/src/view/screens/UpdateSocialScreen.dart';
 
 
@@ -23,6 +24,10 @@ class CreateUserScreenUI extends StatefulWidget{
 
 }
 class _CreateUserScreenUI extends State<CreateUserScreenUI>{
+  final TextEditingController _controllerMobileNumber = TextEditingController();
+  final TextEditingController _controllerPassword = TextEditingController();
+  final TextEditingController _controllerEmail = TextEditingController();
+
 
   @override
   Widget build(BuildContext context) {
@@ -87,6 +92,7 @@ class _CreateUserScreenUI extends State<CreateUserScreenUI>{
                         ),
                         SizedBox(height: 10),
                         TextField(
+                          controller: _controllerMobileNumber,
                           keyboardType: TextInputType.emailAddress,
                           decoration: InputDecoration(
                             labelText: 'Mobile Number',
@@ -107,6 +113,8 @@ class _CreateUserScreenUI extends State<CreateUserScreenUI>{
                         ),
                         SizedBox(height: 10),
                         TextField(
+                          controller: _controllerPassword,
+
                           keyboardType: TextInputType.emailAddress,
                           decoration: InputDecoration(
                             labelText: 'Password',
@@ -127,6 +135,8 @@ class _CreateUserScreenUI extends State<CreateUserScreenUI>{
                         ),
                         SizedBox(height: 10),
                         TextField(
+                          controller: _controllerEmail,
+
                           keyboardType: TextInputType.emailAddress,
                           decoration: InputDecoration(
                             labelText: 'Email Address',
@@ -151,10 +161,21 @@ class _CreateUserScreenUI extends State<CreateUserScreenUI>{
                           ),
                           child: TextButton(
                             onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => UpdateSocialScreen()),
-                              );
+                              if(_controllerMobileNumber.text.isEmpty){
+                               DialogUtil.showAlertDialog(context, 'Please enter mobile number');
+                              }else if(_controllerPassword.text.isEmpty){
+                                DialogUtil.showAlertDialog(context, 'Please enter password');
+
+                              }else if(_controllerEmail.text.isEmpty){
+                                DialogUtil.showAlertDialog(context, 'Please enter email');
+
+                              }else{
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => UpdateSocialScreen()),
+                                );
+                              }
+
                             },
                             child: Text(
                               'Register User',

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:wedding_kart/src/utils/DialogUtil.dart';
 import 'package:wedding_kart/src/view/screens/DashboardScreen.dart';
 import 'package:wedding_kart/src/view/widgets/SingleSelectableChipGroup.dart';
 
@@ -25,7 +26,8 @@ class _UpdateFamilyScreenUI extends State<UpdateFamilyScreenUI>{
 
   String _selectedFatherStatus = 'Employed';
   String _selectedMotherStatus = 'Employed';
-
+  final TextEditingController _controllerNoOfBros = TextEditingController();
+  final TextEditingController _controllerNoOfSis = TextEditingController();
   @override
   Widget build(BuildContext context) {
 
@@ -139,6 +141,7 @@ class _UpdateFamilyScreenUI extends State<UpdateFamilyScreenUI>{
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: TextField(
+                controller: _controllerNoOfBros,
                 keyboardType: TextInputType.name,
                 decoration: InputDecoration(
                   labelText: 'No of brothers',
@@ -151,6 +154,7 @@ class _UpdateFamilyScreenUI extends State<UpdateFamilyScreenUI>{
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: TextField(
+                controller: _controllerNoOfSis,
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   labelText: 'No of Sisters',
@@ -187,10 +191,17 @@ class _UpdateFamilyScreenUI extends State<UpdateFamilyScreenUI>{
                             10)) // Set your desired color
                 ),
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => DashboardScreen()),
-                  );
+                  if(_controllerNoOfBros.text.isEmpty){
+                    DialogUtil.showAlertDialog(context, 'Please enter no of brothers');
+                  }else if(_controllerNoOfSis.text.isEmpty){
+                    DialogUtil.showAlertDialog(context, 'Please enter no of sisters');
+                  }else{
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => DashboardScreen()),
+                    );
+                  }
+
                 },
                 child: Text(
                   'Next',

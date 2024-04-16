@@ -110,11 +110,15 @@ class _RegisterScreenState extends State<RegisterScreenUI> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
+
         title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            IconButton(onPressed: () {
+              Navigator.pop(context);
+            }, icon: Icon(Icons.arrow_back_ios),color: Colors.white,),
             Text(
-              "Wedding Star",
+              "Wedding Star !",
               style: TextStyle(
                 color: Colors.white,
                 fontFamily: 'PlayfairDisplay',
@@ -122,27 +126,6 @@ class _RegisterScreenState extends State<RegisterScreenUI> {
                 fontSize: 24,
               ),
             ),
-            // ElevatedButton(
-            //   onPressed: () {
-            //     // Add your registration logic here
-            //     try {
-            //       Navigator.push(
-            //         context,
-            //         MaterialPageRoute(builder: (context) => MyApp()),
-            //       );
-            //     } catch (e) {
-            //       print('Failed to navigate: $e');
-            //     }
-            //   },
-            //   child: Text('Login',
-            //       style: TextStyle(
-            //         color: Colors.redAccent,
-            //         fontFamily: 'PlayfairDisplay',
-            //         fontWeight: FontWeight.w700,
-            //         fontSize: 16,
-            //       )),
-            //   style: ElevatedButton.styleFrom(backgroundColor: Colors.white),
-            // ),
           ],
         ),
         backgroundColor: Colors.redAccent,
@@ -335,10 +318,20 @@ class _RegisterScreenState extends State<RegisterScreenUI> {
                                                     ),
                                                 onPressed: () {
                                                   // Step 4: Use the controller to do something with the input
-                                                  Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(builder: (context) => CreateUserScreen()),
-                                                  );
+                                                  if(_controllerMotherTongue.text.isEmpty){
+                                                    showAlertDialog(context, 'Please select mother tongue');
+
+                                                  }else if(_controllerCommunity.text.isEmpty){
+
+                                                    showAlertDialog(context, 'Please select your community');
+
+                                                  }else{
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(builder: (context) => CreateUserScreen()),
+                                                    );
+                                                  }
+
                                                 },
                                                 child: Text(
                                                   "Let's Begin",
@@ -419,7 +412,7 @@ class _RegisterScreenState extends State<RegisterScreenUI> {
                     children: [
                       Text(
                         textAlign: TextAlign.center,
-                        'About Sangam', // Title from parameters
+                        'About Wedding Star', // Title from parameters
                         style: TextStyle(
                           fontSize: 24, // Big font size
                           fontWeight: FontWeight.bold,
